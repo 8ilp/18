@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>𒀭 Absolute Decryptor ∞</title>
+    <title> ابو شنب يحميك </title>
+    
+    <!-- ============================================================
+    🛠️ إضافة أدوات فك التشفير (CDN)
+    ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/unluac-js@1.1.0/dist/unluac.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/deobf@1.1.5/dist/index.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -61,6 +69,10 @@
             border: 1px solid #2a2a4a;
             white-space: nowrap;
         }
+        .badge.external {
+            color: #4ade80;
+            border-color: #4ade80;
+        }
         textarea {
             width: 100%;
             height: 170px;
@@ -114,6 +126,30 @@
             border: 1px solid #2a2a4a;
         }
         .btn-copy:active, .btn-clear:active { transform: scale(0.96); }
+        .btn-external {
+            background: #1a3a2a;
+            color: #4ade80;
+            border: 1px solid #2a5a3a;
+            flex: 0.5;
+            min-width: 80px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-external:active { transform: scale(0.96); }
+        .btn-external:hover { background: #1a4a3a; }
+        .external-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            justify-content: center;
+        }
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -184,29 +220,41 @@
             border-top: 1px solid #1a1a3a;
             padding-top: 15px;
         }
-        .method-select {
-            width: 100%;
-            padding: 10px;
-            background: #0d0d1a;
-            color: #e0e0e0;
-            border: 1px solid #2a2a4a;
-            border-radius: 10px;
+        .method-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin: 10px 0;
-            font-size: 0.9rem;
+            justify-content: center;
+        }
+        .method-status .method {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            border: 1px solid #2a2a4a;
+        }
+        .method-status .method.success {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+        .method-status .method.fail {
+            border-color: #f87171;
+            color: #f87171;
         }
         @media (max-width: 500px) {
             h1 { font-size: 1.6rem; }
             .container { padding: 18px 12px; }
             textarea { height: 130px; font-size: 0.85rem; }
             .badge { font-size: 0.55rem; padding: 1px 8px; }
+            .btn-external { min-width: 60px; font-size: 0.75rem; padding: 8px 10px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1> اداه ابو شنب </h1>
-    <p class="sub">أقوى أداة لفك التشفير والتشويش في العالم</p>
+    <h1>🔓 Absolute Decryptor ∞</h1>
+    <p class="sub">أقوى أداة لفك التشفير والتشويش</p>
     
     <div class="badges">
         <span class="badge">string.char</span>
@@ -221,40 +269,31 @@
         <span class="badge">HTML entities</span>
         <span class="badge">Unicode</span>
         <span class="badge">JWT</span>
-        <span class="badge">luadec</span>
-        <span class="badge">unluac</span>
-        <span class="badge">WeAreDevs</span>
-        <span class="badge">LuaDecompiler</span>
-        <span class="badge">loadstring</span>
-        <span class="badge">URL extractor</span>
-        <span class="badge">Function analyzer</span>
+        <span class="badge">js-beautify</span>
+        <span class="badge">unluac-js</span>
+        <span class="badge">deobf</span>
+        <span class="badge external">de4js</span>
+        <span class="badge external">luadec</span>
     </div>
 
-    <select class="method-select" id="methodSelect">
-        <option value="all">🔓 الكل (جميع الطرق)</option>
-        <option value="luadec">luadec</option>
-        <option value="unluac">unluac</option>
-        <option value="wearedevs">WeAreDevs</option>
-        <option value="luadecompiler">LuaDecompiler</option>
-        <option value="base64">base64</option>
-        <option value="stringchar">string.char</option>
-        <option value="hex">Hex</option>
-        <option value="rot13">ROT13</option>
-        <option value="xor">XOR</option>
-        <option value="json">JSON</option>
-    </select>
+    <div class="external-links">
+        <a href="https://lelinhtinh.github.io/de4js/" target="_blank" class="btn-external">🔗 de4js</a>
+        <a href="https://luadec.metaworm.site/" target="_blank" class="btn-external">🔗 luadec</a>
+    </div>
 
     <textarea id="inputCode" placeholder="الصق السكربت المشفر هنا..."></textarea>
 
     <div class="buttons">
-        <button class="btn-decrypt" id="decryptBtn">⚡ فك التشفير</button>
+        <button class="btn-decrypt" id="decryptBtn">⚡ فك التشفير (جميع الطرق)</button>
         <button class="btn-copy" id="copyBtn">📋 نسخ</button>
         <button class="btn-clear" id="clearBtn">🗑️ مسح</button>
     </div>
 
+    <div class="method-status" id="methodStatus"></div>
+
     <div class="loading" id="loading">
         <div class="spinner"></div>
-        <p style="margin-top: 12px; color: #94a3b8; font-size: 0.95rem;">جاري فك التشفير...</p>
+        <p style="margin-top: 12px; color: #94a3b8; font-size: 0.95rem;">جاري فك التشفير بجميع الطرق...</p>
     </div>
 
     <div class="stats" id="statsContainer"></div>
@@ -263,35 +302,181 @@
         <pre id="outputResult"></pre>
     </div>
 
-    <div class="footer">🛡️ بيئة معزولة · آمنة ١٠٠٪ · انت بحمايتي انا ابو شنب
+    <div class="footer">🛡️ انت بحمايه ابو شنب </div>
+</div>
 
 <script>
     (function() {
         'use strict';
 
         // ============================================================
-        // 🔥 API URL (الخادم الجاهز)
-        // ============================================================
-        
-        const API_URL = 'https://decrypt-api-8ilp.vercel.app/decrypt';
-
-        // ============================================================
-        // 🔥 محرك فك التشفير (مع الاتصال بالخادم)
+        // 🔥 جميع طرق فك التشفير (داخل المتصفح)
         // ============================================================
 
-        async function decryptWithAPI(code, method) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ code, method })
-                });
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                return { success: false, error: error.message };
+        const decryptMethods = {
+            // 1️⃣ string.char
+            stringchar: function(code) {
+                try {
+                    return code.replace(/string\.char\(([^)]*)\)/g, (_, args) => {
+                        const chars = args.match(/\d+/g);
+                        if (!chars) return _;
+                        return '"' + chars.map(c => String.fromCharCode(+c)).join('') + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 2️⃣ base64
+            base64: function(code) {
+                try {
+                    let result = code.replace(/base64\.decode\(["']([^"']+)["']\)/g, (_, str) => {
+                        try { return `"${atob(str)}"`; } catch { return _; }
+                    });
+                    result = result.replace(/["']([A-Za-z0-9+/=]{20,})["']/g, (_, str) => {
+                        try { return `"${atob(str)}"`; } catch { return _; }
+                    });
+                    return result;
+                } catch { return null; }
+            },
+
+            // 3️⃣ Hex
+            hex: function(code) {
+                try {
+                    return code.replace(/string\.fromCharCode\(0x[^)]*\)/g, (match) => {
+                        const hex = match.match(/0x([0-9a-f]+)/gi);
+                        if (!hex) return match;
+                        return '"' + hex.map(h => String.fromCharCode(parseInt(h, 16))).join('') + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 4️⃣ URL encoding
+            url: function(code) {
+                try {
+                    return code.replace(/%[0-9A-Fa-f]{2}/g, (match) => {
+                        try { return decodeURIComponent(match); } catch { return match; }
+                    });
+                } catch { return null; }
+            },
+
+            // 5️⃣ ROT13
+            rot13: function(code) {
+                try {
+                    return code.replace(/rot13\(["']([^"']+)["']\)/g, (_, str) => {
+                        return '"' + str.replace(/[a-zA-Z]/g, c => {
+                            const code = c.charCodeAt(0);
+                            const base = code <= 90 ? 65 : 97;
+                            return String.fromCharCode((code - base + 13) % 26 + base);
+                        }) + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 6️⃣ XOR
+            xor: function(code) {
+                try {
+                    return code.replace(/xor\(["']([^"']+)["'],\s*(\d+)\)/g, (_, str, key) => {
+                        const k = +key;
+                        return '"' + str.split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ k)).join('') + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 7️⃣ Caesar
+            caesar: function(code) {
+                try {
+                    return code.replace(/caesar\(["']([^"']+)["'],\s*(\d+)\)/g, (_, str, shift) => {
+                        const s = +shift;
+                        return '"' + str.replace(/[a-zA-Z]/g, c => {
+                            const code = c.charCodeAt(0);
+                            const base = code <= 90 ? 65 : 97;
+                            return String.fromCharCode((code - base + s) % 26 + base);
+                        }) + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 8️⃣ Reverse
+            reverse: function(code) {
+                try {
+                    return code.replace(/reverse\(["']([^"']+)["']\)/g, (_, str) => {
+                        return '"' + str.split('').reverse().join('') + '"';
+                    });
+                } catch { return null; }
+            },
+
+            // 9️⃣ JSON
+            json: function(code) {
+                try {
+                    return code.replace(/json\.parse\(["']([^"']+)["']\)/g, (_, str) => {
+                        try { return JSON.stringify(JSON.parse(str), null, 2); } catch { return _; }
+                    });
+                } catch { return null; }
+            },
+
+            // 🔟 HTML entities
+            html: function(code) {
+                try {
+                    const entities = {
+                        '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"',
+                        '&apos;': "'", '&nbsp;': ' ', '&copy;': '©', '&reg;': '®'
+                    };
+                    return code.replace(/&[a-zA-Z]+;/g, m => entities[m] || m);
+                } catch { return null; }
+            },
+
+            // 1️⃣1️⃣ Unicode
+            unicode: function(code) {
+                try {
+                    return code.replace(/\\u([0-9a-f]{4})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+                } catch { return null; }
+            },
+
+            // 1️⃣2️⃣ JWT
+            jwt: function(code) {
+                try {
+                    return code.replace(/([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)/g, (match) => {
+                        try {
+                            const parts = match.split('.');
+                            const header = JSON.parse(atob(parts[0]));
+                            const payload = JSON.parse(atob(parts[1]));
+                            return JSON.stringify({ header, payload }, null, 2);
+                        } catch { return match; }
+                    });
+                } catch { return null; }
+            },
+
+            // 1️⃣3️⃣ js-beautify
+            beautify: function(code) {
+                try {
+                    if (typeof js_beautify !== 'undefined') {
+                        return js_beautify(code, { indent_size: 2 });
+                    }
+                    return null;
+                } catch { return null; }
+            },
+
+            // 1️⃣4️⃣ unluac-js
+            unluac: function(code) {
+                try {
+                    if (typeof unluac !== 'undefined') {
+                        const result = unluac.decompile(code);
+                        return result || null;
+                    }
+                    return null;
+                } catch { return null; }
+            },
+
+            // 1️⃣5️⃣ deobf
+            deobf: function(code) {
+                try {
+                    if (typeof deobf !== 'undefined') {
+                        const result = deobf(code);
+                        return result || null;
+                    }
+                    return null;
+                } catch { return null; }
             }
-        }
+        };
 
         // ============================================================
         // 🎮 واجهة المستخدم
@@ -305,9 +490,9 @@
         const outputEl = document.getElementById('outputResult');
         const statsContainer = document.getElementById('statsContainer');
         const loadingEl = document.getElementById('loading');
-        const methodSelect = document.getElementById('methodSelect');
+        const methodStatus = document.getElementById('methodStatus');
 
-        async function decrypt() {
+        async function decryptAll() {
             const code = inputEl.value.trim();
             if (!code) {
                 alert('الرجاء إدخال سكربت لفك التشفير.');
@@ -316,41 +501,48 @@
 
             loadingEl.classList.add('show');
             resultBox.classList.remove('show');
+            methodStatus.innerHTML = '';
             decryptBtn.disabled = true;
             decryptBtn.textContent = '⏳ جاري...';
 
-            try {
-                const method = methodSelect.value;
-                const result = await decryptWithAPI(code, method);
+            let results = [];
+            let finalResult = code;
 
-                if (result.success) {
-                    outputEl.textContent = result.result || '⚠️ لا يوجد كود لفك التشفير.';
-                    
-                    // عرض الإحصائيات
-                    if (result.methods_used) {
-                        statsContainer.innerHTML = result.methods_used.map(m => 
-                            `<div class="stat"><div class="num">✅</div><div class="label">${m.method}</div></div>`
-                        ).join('');
+            for (const [name, fn] of Object.entries(decryptMethods)) {
+                try {
+                    const result = fn(finalResult);
+                    if (result && result !== finalResult) {
+                        results.push({ method: name, success: true });
+                        finalResult = result;
                     } else {
-                        statsContainer.innerHTML = `<div class="stat"><div class="num">✅</div><div class="label">تم</div></div>`;
+                        results.push({ method: name, success: false });
                     }
-                    
-                    if (result.errors && result.errors.length > 0) {
-                        outputEl.textContent += '\n\n⚠️ الأخطاء:\n' + result.errors.join('\n');
-                    }
-                } else {
-                    outputEl.textContent = '❌ خطأ: ' + (result.error || 'فشل فك التشفير');
+                } catch (e) {
+                    results.push({ method: name, success: false });
                 }
-
-                resultBox.classList.add('show');
-
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
-            } finally {
-                loadingEl.classList.remove('show');
-                decryptBtn.disabled = false;
-                decryptBtn.textContent = '⚡ فك التشفير';
             }
+
+            // عرض حالة كل طريقة
+            methodStatus.innerHTML = results.map(r => 
+                `<span class="method ${r.success ? 'success' : 'fail'}">${r.method} ${r.success ? '✅' : '❌'}</span>`
+            ).join('');
+
+            // عرض النتيجة النهائية
+            outputEl.textContent = finalResult || '⚠️ لا يوجد كود لفك التشفير.';
+            resultBox.classList.add('show');
+
+            // إحصائيات
+            const successCount = results.filter(r => r.success).length;
+            const totalCount = results.length;
+            statsContainer.innerHTML = `
+                <div class="stat"><div class="num">${successCount}/${totalCount}</div><div class="label">نجحت</div></div>
+                <div class="stat"><div class="num">${finalResult.split('\n').length}</div><div class="label">أسطر</div></div>
+                <div class="stat"><div class="num">${(new Blob([finalResult]).size / 1024).toFixed(1)}KB</div><div class="label">الحجم</div></div>
+            `;
+
+            loadingEl.classList.remove('show');
+            decryptBtn.disabled = false;
+            decryptBtn.textContent = '⚡ فك التشفير (جميع الطرق)';
         }
 
         // نسخ النتيجة
@@ -366,29 +558,4 @@
                 const area = document.createElement('textarea');
                 area.value = text;
                 document.body.appendChild(area);
-                area.select();
-                document.execCommand('copy');
-                area.remove();
-                alert('✅ تم نسخ النص!');
-            });
-        });
-
-        // مسح
-        clearBtn.addEventListener('click', () => {
-            inputEl.value = '';
-            resultBox.classList.remove('show');
-            statsContainer.innerHTML = '';
-            outputEl.textContent = '';
-        });
-
-        // تشغيل عند التحميل
-        decryptBtn.addEventListener('click', decrypt);
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(decrypt, 500);
-        });
-
-    })();
-</script>
-
-</body>
-</html>
+                area.s
