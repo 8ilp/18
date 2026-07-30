@@ -184,6 +184,16 @@
             border-top: 1px solid #1a1a3a;
             padding-top: 15px;
         }
+        .method-select {
+            width: 100%;
+            padding: 10px;
+            background: #0d0d1a;
+            color: #e0e0e0;
+            border: 1px solid #2a2a4a;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
         @media (max-width: 500px) {
             h1 { font-size: 1.6rem; }
             .container { padding: 18px 12px; }
@@ -195,7 +205,7 @@
 <body>
 
 <div class="container">
-    <h1>🔓 Absolute Decryptor ∞</h1>
+    <h1> اداه ابو شنب </h1>
     <p class="sub">أقوى أداة لفك التشفير والتشويش في العالم</p>
     
     <div class="badges">
@@ -211,12 +221,28 @@
         <span class="badge">HTML entities</span>
         <span class="badge">Unicode</span>
         <span class="badge">JWT</span>
-        <span class="badge">Gzip</span>
-        <span class="badge">LZString</span>
+        <span class="badge">luadec</span>
+        <span class="badge">unluac</span>
+        <span class="badge">WeAreDevs</span>
+        <span class="badge">LuaDecompiler</span>
         <span class="badge">loadstring</span>
         <span class="badge">URL extractor</span>
         <span class="badge">Function analyzer</span>
     </div>
+
+    <select class="method-select" id="methodSelect">
+        <option value="all">🔓 الكل (جميع الطرق)</option>
+        <option value="luadec">luadec</option>
+        <option value="unluac">unluac</option>
+        <option value="wearedevs">WeAreDevs</option>
+        <option value="luadecompiler">LuaDecompiler</option>
+        <option value="base64">base64</option>
+        <option value="stringchar">string.char</option>
+        <option value="hex">Hex</option>
+        <option value="rot13">ROT13</option>
+        <option value="xor">XOR</option>
+        <option value="json">JSON</option>
+    </select>
 
     <textarea id="inputCode" placeholder="الصق السكربت المشفر هنا..."></textarea>
 
@@ -237,196 +263,39 @@
         <pre id="outputResult"></pre>
     </div>
 
-    <div class="footer">🛡️ بيئة معزولة · آمنة ١٠٠٪ · جميع أدوات فك التشفير</div>
-</div>
+    <div class="footer">🛡️ بيئة معزولة · آمنة ١٠٠٪ · انت بحمايتي انا ابو شنب
 
 <script>
     (function() {
         'use strict';
 
-        // ═══════════════════════════════════════════════════════════════════
-        // 🔥 محرك فك التشفير المطلق (جميع الأدوات)
-        // ═══════════════════════════════════════════════════════════════════
+        // ============================================================
+        // 🔥 API URL (الخادم الجاهز)
+        // ============================================================
+        
+        const API_URL = 'https://decrypt-api-8ilp.vercel.app/decrypt';
 
-        const Decryptor = {
-            // استخراج جميع روابط loadstring
-            extractLoadStrings(code) {
-                const pattern = /loadstring\(game:HttpGet\(["']([^"']+)["']\)\)\(\)/g;
-                const matches = [];
-                let match;
-                while ((match = pattern.exec(code)) !== null) {
-                    matches.push(match[1]);
-                }
-                return matches;
-            },
+        // ============================================================
+        // 🔥 محرك فك التشفير (مع الاتصال بالخادم)
+        // ============================================================
 
-            // جلب السكربت من الرابط
-            async fetchScript(url) {
-                try {
-                    const response = await fetch(url, {
-                        headers: { 'User-Agent': 'Mozilla/5.0' }
-                    });
-                    if (!response.ok) return null;
-                    return await response.text();
-                } catch {
-                    return null;
-                }
-            },
-
-            // فك الطبقات المتداخلة
-            async recursiveDecrypt(code, depth = 0) {
-                if (depth > 99) return code + '\n\n-- [ وصلت للحد الأقصى 99 طبقة ]';
-                const urls = this.extractLoadStrings(code);
-                if (urls.length === 0) return code;
-
-                let result = code;
-                for (const url of urls) {
-                    const fetched = await this.fetchScript(url);
-                    if (fetched) {
-                        result = result.replace(
-                            new RegExp(`loadstring\\(game:HttpGet\\(["']${url}["']\\)\\)\\(\\)`, 'g'),
-                            `\n-- [[ فك الطبقة ${depth + 1}: ${url} ]]\n${fetched}`
-                        );
-                        result = await this.recursiveDecrypt(result, depth + 1);
-                    } else {
-                        result = result.replace(
-                            new RegExp(`loadstring\\(game:HttpGet\\(["']${url}["']\\)\\)\\(\\)`, 'g'),
-                            `\n-- [ فشل تحميل: ${url} ]`
-                        );
-                    }
-                }
-                return result;
-            },
-
-            // ═══════════════════════════════════════════════════════════════════
-            // 🛠️ جميع أدوات فك التشفير
-            // ═══════════════════════════════════════════════════════════════════
-
-            deobfuscateStrings(code) {
-                let result = code;
-
-                // 1. string.char
-                result = result.replace(/string\.char\(([^)]*)\)/g, (match, args) => {
-                    const chars = args.match(/\d+/g);
-                    if (!chars) return match;
-                    return '"' + chars.map(c => String.fromCharCode(parseInt(c))).join('') + '"';
+        async function decryptWithAPI(code, method) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, method })
                 });
-
-                // 2. base64
-                result = result.replace(/base64\.decode\(["']([^"']+)["']\)/g, (match, str) => {
-                    try {
-                        return `"${atob(str)}"`;
-                    } catch { return match; }
-                });
-
-                // 3. Hex
-                result = result.replace(/string\.fromCharCode\(0x[^)]*\)/g, (match) => {
-                    try {
-                        const hex = match.match(/0x([0-9a-f]+)/gi);
-                        if (!hex) return match;
-                        const chars = hex.map(h => String.fromCharCode(parseInt(h, 16)));
-                        return `"${chars.join('')}"`;
-                    } catch { return match; }
-                });
-
-                // 4. URL encoding
-                result = result.replace(/%[0-9A-Fa-f]{2}/g, (match) => {
-                    try {
-                        return decodeURIComponent(match);
-                    } catch { return match; }
-                });
-
-                // 5. ROT13
-                result = result.replace(/rot13\(["']([^"']+)["']\)/g, (match, str) => {
-                    return '"' + str.replace(/[a-zA-Z]/g, c => {
-                        const code = c.charCodeAt(0);
-                        const base = (code <= 90) ? 65 : 97;
-                        return String.fromCharCode((code - base + 13) % 26 + base);
-                    }) + '"';
-                });
-
-                // 6. XOR basic
-                result = result.replace(/xor\(["']([^"']+)["'],\s*(\d+)\)/g, (match, str, key) => {
-                    const k = parseInt(key);
-                    return '"' + str.split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ k)).join('') + '"';
-                });
-
-                // 7. Caesar cipher
-                result = result.replace(/caesar\(["']([^"']+)["'],\s*(\d+)\)/g, (match, str, shift) => {
-                    const s = parseInt(shift);
-                    return '"' + str.replace(/[a-zA-Z]/g, c => {
-                        const code = c.charCodeAt(0);
-                        const base = (code <= 90) ? 65 : 97;
-                        return String.fromCharCode((code - base + s) % 26 + base);
-                    }) + '"';
-                });
-
-                // 8. Reverse string
-                result = result.replace(/reverse\(["']([^"']+)["']\)/g, (match, str) => {
-                    return '"' + str.split('').reverse().join('') + '"';
-                });
-
-                // 9. JSON parse
-                result = result.replace(/json\.parse\(["']([^"']+)["']\)/g, (match, str) => {
-                    try {
-                        const parsed = JSON.parse(str);
-                        return JSON.stringify(parsed, null, 2);
-                    } catch { return match; }
-                });
-
-                // 10. HTML entities
-                result = result.replace(/&[a-zA-Z]+;/g, (match) => {
-                    const entities = {
-                        '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"',
-                        '&apos;': "'", '&nbsp;': ' ', '&copy;': '©', '&reg;': '®'
-                    };
-                    return entities[match] || match;
-                });
-
-                // 11. Unicode escape
-                result = result.replace(/\\u([0-9a-f]{4})/gi, (match, hex) => {
-                    return String.fromCharCode(parseInt(hex, 16));
-                });
-
-                // 12. JWT decode (basic)
-                result = result.replace(/([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)/g, (match) => {
-                    try {
-                        const parts = match.split('.');
-                        const header = JSON.parse(atob(parts[0]));
-                        const payload = JSON.parse(atob(parts[1]));
-                        return JSON.stringify({ header, payload }, null, 2);
-                    } catch { return match; }
-                });
-
-                // 13. Gzip decompress (placeholder)
-                result = result.replace(/gzip\.decompress\(["']([^"']+)["']\)/g, (match, str) => {
-                    return `-- [ Gzip decompression not supported in browser ]\n-- ${str}`;
-                });
-
-                // 14. LZString decompress (placeholder)
-                result = result.replace(/lzstring\.decompress\(["']([^"']+)["']\)/g, (match, str) => {
-                    return `-- [ LZString decompression not supported in browser ]\n-- ${str}`;
-                });
-
-                return result;
-            },
-
-            // ═══════════════════════════════════════════════════════════════════
-            // 📊 تحليل إحصائي
-            // ═══════════════════════════════════════════════════════════════════
-
-            analyze(code) {
-                const urls = this.extractLoadStrings(code);
-                const functions = (code.match(/function\s+\w*\s*\(/g) || []).length;
-                const lines = code.split('\n').length;
-                const size = new Blob([code]).size;
-                return { urls: urls.length, functions, lines, size };
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                return { success: false, error: error.message };
             }
-        };
+        }
 
-        // ═══════════════════════════════════════════════════════════════════
+        // ============================================================
         // 🎮 واجهة المستخدم
-        // ═══════════════════════════════════════════════════════════════════
+        // ============================================================
 
         const inputEl = document.getElementById('inputCode');
         const decryptBtn = document.getElementById('decryptBtn');
@@ -436,6 +305,7 @@
         const outputEl = document.getElementById('outputResult');
         const statsContainer = document.getElementById('statsContainer');
         const loadingEl = document.getElementById('loading');
+        const methodSelect = document.getElementById('methodSelect');
 
         async function decrypt() {
             const code = inputEl.value.trim();
@@ -450,19 +320,28 @@
             decryptBtn.textContent = '⏳ جاري...';
 
             try {
-                let result = await Decryptor.recursiveDecrypt(code);
-                result = Decryptor.deobfuscateStrings(result);
+                const method = methodSelect.value;
+                const result = await decryptWithAPI(code, method);
 
-                const stats = Decryptor.analyze(result);
+                if (result.success) {
+                    outputEl.textContent = result.result || '⚠️ لا يوجد كود لفك التشفير.';
+                    
+                    // عرض الإحصائيات
+                    if (result.methods_used) {
+                        statsContainer.innerHTML = result.methods_used.map(m => 
+                            `<div class="stat"><div class="num">✅</div><div class="label">${m.method}</div></div>`
+                        ).join('');
+                    } else {
+                        statsContainer.innerHTML = `<div class="stat"><div class="num">✅</div><div class="label">تم</div></div>`;
+                    }
+                    
+                    if (result.errors && result.errors.length > 0) {
+                        outputEl.textContent += '\n\n⚠️ الأخطاء:\n' + result.errors.join('\n');
+                    }
+                } else {
+                    outputEl.textContent = '❌ خطأ: ' + (result.error || 'فشل فك التشفير');
+                }
 
-                statsContainer.innerHTML = `
-                    <div class="stat"><div class="num">${stats.urls}</div><div class="label">روابط</div></div>
-                    <div class="stat"><div class="num">${stats.functions}</div><div class="label">دوال</div></div>
-                    <div class="stat"><div class="num">${stats.lines}</div><div class="label">أسطر</div></div>
-                    <div class="stat"><div class="num">${(stats.size / 1024).toFixed(1)}KB</div><div class="label">الحجم</div></div>
-                `;
-
-                outputEl.textContent = result || '⚠️ لا يوجد كود لفك التشفير.';
                 resultBox.classList.add('show');
 
             } catch (error) {
@@ -474,6 +353,7 @@
             }
         }
 
+        // نسخ النتيجة
         copyBtn.addEventListener('click', () => {
             const text = outputEl.textContent;
             if (!text || text === '⚠️ لا يوجد كود لفك التشفير.') {
@@ -493,6 +373,7 @@
             });
         });
 
+        // مسح
         clearBtn.addEventListener('click', () => {
             inputEl.value = '';
             resultBox.classList.remove('show');
@@ -500,6 +381,7 @@
             outputEl.textContent = '';
         });
 
+        // تشغيل عند التحميل
         decryptBtn.addEventListener('click', decrypt);
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(decrypt, 500);
