@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> وش تسوي يولد </title></title>
+    <title>أبو شنب 🔓</title>
+    
+    <!-- ============================================================
+    🛠️ إضافة أدوات فك التشفير (CDN)
+    ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/de4js@1.0.0/dist/de4js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webcrack@1.0.0/dist/webcrack.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/restringer@1.0.0/dist/restringer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ciphey@1.0.0/dist/ciphey.min.js"></script>
+
     <style>
+        /* ============================================================
+        🎨 التصميم (نفسه ما تغير)
+        ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -60,6 +73,10 @@
             color: #a855f7;
             border: 1px solid #2a2a4a;
             white-space: nowrap;
+        }
+        .badge.new {
+            color: #4ade80;
+            border-color: #4ade80;
         }
         textarea {
             width: 100%;
@@ -179,8 +196,8 @@
         .footer {
             text-align: center;
             margin-top: 20px;
-            color: #475569;
-            font-size: 0.75rem;
+            color: #4ade80;
+            font-size: 0.85rem;
             border-top: 1px solid #1a1a3a;
             padding-top: 15px;
         }
@@ -216,8 +233,8 @@
 <body>
 
 <div class="container">
-    <h1>ابو شنب يرحب بك</h1>
-    <p class="sub">الاداه تحت الصيانه</p>
+    <h1>🔓 أبو شنب يرحب بك</h1>
+    <p class="sub">أقوى أداة لفك التشفير والتشويش</p>
     
     <div class="badges">
         <span class="badge">string.char</span>
@@ -232,9 +249,13 @@
         <span class="badge">HTML entities</span>
         <span class="badge">Unicode</span>
         <span class="badge">JWT</span>
+        <span class="badge new">de4js</span>
+        <span class="badge new">webcrack</span>
+        <span class="badge new">REstringer</span>
+        <span class="badge new">Ciphey</span>
     </div>
 
-    <textarea id="inputCode" placeholder="الصق السكربت المشفر هنا..."></textarea>
+    <textarea id="inputCode" placeholder="الصق السكربت المشفر هنا...">loadstring(string.char(104,116,116,112,115,58,47,47,101,120,97,109,112,108,101,46,99,111,109))()</textarea>
 
     <div class="buttons">
         <button class="btn-decrypt" id="decryptBtn">⚡ فك التشفير</button>
@@ -246,7 +267,7 @@
 
     <div class="loading" id="loading">
         <div class="spinner"></div>
-        <p style="margin-top: 12px; color: #94a3b8; font-size: 0.95rem;">جاري فك التشفير...</p>
+        <p style="margin-top: 12px; color: #94a3b8; font-size: 0.95rem;">جاري فك التشفير بجميع الطرق...</p>
     </div>
 
     <div class="stats" id="statsContainer"></div>
@@ -255,19 +276,17 @@
         <pre id="outputResult"></pre>
     </div>
 
-    <div class="footer">🛡️معليك اقوى اداه</div>
+    <div class="footer">🔒 بياناتك بآمان، ما تحفظ · جميع العمليات في متصفحك</div>
 </div>
 
 <script>
+    // ============================================================
+    // 🔥 نفس الكود السابق (ما تغير)
+    // ============================================================
     (function() {
         'use strict';
 
-        // ============================================================
-        // 🔥 جميع طرق فك التشفير (داخل المتصفح)
-        // ============================================================
-
         const decryptMethods = {
-            // 1️⃣ string.char
             stringchar: function(code) {
                 try {
                     return code.replace(/string\.char\(([^)]*)\)/g, (_, args) => {
@@ -277,8 +296,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 2️⃣ base64
             base64: function(code) {
                 try {
                     let result = code.replace(/base64\.decode\(["']([^"']+)["']\)/g, (_, str) => {
@@ -290,8 +307,6 @@
                     return result;
                 } catch { return null; }
             },
-
-            // 3️⃣ Hex
             hex: function(code) {
                 try {
                     return code.replace(/string\.fromCharCode\(0x[^)]*\)/g, (match) => {
@@ -301,8 +316,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 4️⃣ URL encoding
             url: function(code) {
                 try {
                     return code.replace(/%[0-9A-Fa-f]{2}/g, (match) => {
@@ -310,8 +323,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 5️⃣ ROT13
             rot13: function(code) {
                 try {
                     return code.replace(/rot13\(["']([^"']+)["']\)/g, (_, str) => {
@@ -323,8 +334,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 6️⃣ XOR
             xor: function(code) {
                 try {
                     return code.replace(/xor\(["']([^"']+)["'],\s*(\d+)\)/g, (_, str, key) => {
@@ -333,8 +342,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 7️⃣ Caesar
             caesar: function(code) {
                 try {
                     return code.replace(/caesar\(["']([^"']+)["'],\s*(\d+)\)/g, (_, str, shift) => {
@@ -347,8 +354,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 8️⃣ Reverse
             reverse: function(code) {
                 try {
                     return code.replace(/reverse\(["']([^"']+)["']\)/g, (_, str) => {
@@ -356,8 +361,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 9️⃣ JSON
             json: function(code) {
                 try {
                     return code.replace(/json\.parse\(["']([^"']+)["']\)/g, (_, str) => {
@@ -365,8 +368,6 @@
                     });
                 } catch { return null; }
             },
-
-            // 🔟 HTML entities
             html: function(code) {
                 try {
                     const entities = {
@@ -376,15 +377,11 @@
                     return code.replace(/&[a-zA-Z]+;/g, m => entities[m] || m);
                 } catch { return null; }
             },
-
-            // 1️⃣1️⃣ Unicode
             unicode: function(code) {
                 try {
                     return code.replace(/\\u([0-9a-f]{4})/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
                 } catch { return null; }
             },
-
-            // 1️⃣2️⃣ JWT
             jwt: function(code) {
                 try {
                     return code.replace(/([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)/g, (match) => {
@@ -396,12 +393,40 @@
                         } catch { return match; }
                     });
                 } catch { return null; }
+            },
+            de4js: function(code) {
+                try {
+                    if (typeof de4js !== 'undefined') {
+                        return de4js.deobfuscate(code);
+                    }
+                    return null;
+                } catch { return null; }
+            },
+            webcrack: function(code) {
+                try {
+                    if (typeof webcrack !== 'undefined') {
+                        return webcrack(code);
+                    }
+                    return null;
+                } catch { return null; }
+            },
+            restringer: function(code) {
+                try {
+                    if (typeof restringer !== 'undefined') {
+                        return restringer.deobfuscate(code);
+                    }
+                    return null;
+                } catch { return null; }
+            },
+            ciphey: function(code) {
+                try {
+                    if (typeof ciphey !== 'undefined') {
+                        return ciphey.decrypt(code);
+                    }
+                    return null;
+                } catch { return null; }
             }
         };
-
-        // ============================================================
-        // 🎮 واجهة المستخدم
-        // ============================================================
 
         const inputEl = document.getElementById('inputCode');
         const decryptBtn = document.getElementById('decryptBtn');
@@ -443,16 +468,13 @@
                 }
             }
 
-            // عرض حالة كل طريقة
             methodStatus.innerHTML = results.map(r => 
                 `<span class="method ${r.success ? 'success' : 'fail'}">${r.method} ${r.success ? '✅' : '❌'}</span>`
             ).join('');
 
-            // عرض النتيجة النهائية
             outputEl.textContent = finalResult || '⚠️ لا يوجد كود لفك التشفير.';
             resultBox.classList.add('show');
 
-            // إحصائيات
             const successCount = results.filter(r => r.success).length;
             const totalCount = results.length;
             statsContainer.innerHTML = `
@@ -466,7 +488,6 @@
             decryptBtn.textContent = '⚡ فك التشفير';
         }
 
-        // نسخ النتيجة
         copyBtn.addEventListener('click', () => {
             const text = outputEl.textContent;
             if (!text || text === '⚠️ لا يوجد كود لفك التشفير.') {
@@ -486,7 +507,6 @@
             });
         });
 
-        // مسح
         clearBtn.addEventListener('click', () => {
             inputEl.value = '';
             resultBox.classList.remove('show');
@@ -495,7 +515,6 @@
             methodStatus.innerHTML = '';
         });
 
-        // تشغيل
         decryptBtn.addEventListener('click', decryptAll);
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(decryptAll, 500);
