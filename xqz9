@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>𒀭 Absolute Decryptor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #141424;
+            border-radius: 24px;
+            padding: 30px 25px;
+            border: 1px solid #2a2a4a;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(124,58,237,0.05);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+        .sub {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+        textarea {
+            width: 100%;
+            height: 170px;
+            padding: 14px;
+            background: #0d0d1a;
+            border: 1px solid #2a2a4a;
+            border-radius: 14px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border 0.3s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 20px rgba(168,85,247,0.1);
+        }
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin: 18px 0;
+            flex-wrap: wrap;
+        }
+        .buttons button {
+            flex: 1;
+            min-width: 100px;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+        .btn-decrypt {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+        }
+        .btn-decrypt:active { transform: scale(0.96); }
+        .btn-copy {
+            background: #1a2a3a;
+            color: #94a3b8;
+            border: 1px solid #2a4a4a;
+        }
+        .btn-clear {
+            background: #1e1e3a;
+            color: #94a3b8;
+            border: 1px solid #2a2a4a;
+        }
+        .btn-copy:active, .btn-clear:active { transform: scale(0.96); }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stat {
+            background: #0d0d1a;
+            padding: 12px 8px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #1a1a3a;
+        }
+        .stat .num {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #a855f7;
+        }
+        .stat .label {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .result-box {
+            background: #0d0d1a;
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid #1a1a3a;
+            max-height: 400px;
+            overflow: auto;
+            display: none;
+            margin-top: 10px;
+        }
+        .result-box.show { display: block; }
+        .result-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #c4b5fd;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading.show { display: block; }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1a1a3a;
+            border-top: 4px solid #a855f7;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #475569;
+            font-size: 0.8rem;
+            border-top: 1px solid #1a1a3a;
+            padding-top: 15px;
+        }
+        @media (max-width: 500px) {
+            h1 { font-size: 1.6rem; }
+            .container { padding: 18px 12px; }
+            textarea { height: 130px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔓 Absolute Decryptor</h1>
+    <p class="sub">أقوى أداة لفك التشفير والتشويش في العالم</p>
+
+    <textarea id="inputCode" placeholder="الصق السكربت المشفر هنا...">loadstring(game:HttpGet("https://raw.githubusercontent.com/MCR4-team/MCR4-PUBLIC/refs/heads/main/MCR4%20SCRIPT"))()</textarea>
+
+    <div class="buttons">
+        <button class="btn-decrypt" id="decryptBtn">⚡ فك التشفير</button>
+        <button class="btn-copy" id="copyBtn">📋 نسخ</button>
+        <button class="btn-clear" id="clearBtn">🗑️ مسح</button>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 12px; color: #94a3b8; font-size: 0.95rem;">جاري فك التشفير...</p>
+    </div>
+
+    <div class="stats" id="statsContainer"></div>
+
+    <div class="result-box" id="resultBox">
+        <pre id="outputResult"></pre>
+    </div>
+
+    <div class="footer">𒀭 تعمل بأمرك · جميع الحقوق محفوظة</div>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // ═══════════════════════════════════════════════════════════════════
+        // 🔥 محرك فك التشفير المطلق
+        // ═══════════════════════════════════════════════════════════════════
+
+        const Decryptor = {
+            // استخراج جميع روابط loadstring
+            extractLoadStrings(code) {
+                const pattern = /loadstring\(game:HttpGet\(["']([^"']+)["']\)\)\(\)/g;
+                const matches = [];
+                let match;
+                while ((match = pattern.exec(code)) !== null) {
+                    matches.push(match[1]);
+                }
+                return matches;
+            },
+
+            // جلب السكربت من الرابط
+            async fetchScript(url) {
+                try {
+                    const response = await fetch(url, {
+                        headers: { 'User-Agent': 'Mozilla/5.0' }
+                    });
+                    if (!response.ok) return null;
+                    return await response.text();
+                } catch {
+                    return null;
+                }
+            },
+
+            // فك الطبقات المتداخلة (حتى 99 طبقة)
+            async recursiveDecrypt(code, depth = 0) {
+                if (depth > 99) return code + '\n\n-- [ وصلت للحد الأقصى 99 طبقة ]';
+                const urls = this.extractLoadStrings(code);
+                if (urls.length === 0) return code;
+
+                let result = code;
+                for (const url of urls) {
+                    const fetched = await this.fetchScript(url);
+                    if (fetched) {
+                        result = result.replace(
+                            new RegExp(`loadstring\\(game:HttpGet\\(["']${url}["']\\)\\)\\(\\)`, 'g'),
+                            `\n-- [[ فك الطبقة ${depth + 1}: ${url} ]]\n${fetched}`
+                        );
+                        result = await this.recursiveDecrypt(result, depth + 1);
+                    } else {
+                        result = result.replace(
+                            new RegExp(`loadstring\\(game:HttpGet\\(["']${url}["']\\)\\)\\(\\)`, 'g'),
+                            `\n-- [ فشل تحميل: ${url} ]`
+                        );
+                    }
+                }
+                return result;
+            },
+
+            // فك تشفير السلاسل النصية
+            deobfuscateStrings(code) {
+                let result = code;
+
+                // string.char
+                result = result.replace(/string\.char\(([^)]*)\)/g, (match, args) => {
+                    const chars = args.match(/\d+/g);
+                    if (!chars) return match;
+                    return '"' + chars.map(c => String.fromCharCode(parseInt(c))).join('') + '"';
+                });
+
+                // base64
+                result = result.replace(/base64\.decode\(["']([^"']+)["']\)/g, (match, str) => {
+                    try {
+                        return `"${atob(str)}"`;
+                    } catch { return match; }
+                });
+
+                // Hex
+                result = result.replace(/string\.fromCharCode\(0x[^)]*\)/g, (match) => {
+                    try {
+                        const hex = match.match(/0x([0-9a-f]+)/gi);
+                        if (!hex) return match;
+                        const chars = hex.map(h => String.fromCharCode(parseInt(h, 16)));
+                        return `"${chars.join('')}"`;
+                    } catch { return match; }
+                });
+
+                return result;
+            },
+
+            // تحليل إحصائي
+            analyze(code) {
+                const urls = this.extractLoadStrings(code);
+                const functions = (code.match(/function\s+\w*\s*\(/g) || []).length;
+                const lines = code.split('\n').length;
+                const size = new Blob([code]).size;
+                return { urls: urls.length, functions, lines, size };
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════════
+        // 🎮 واجهة المستخدم
+        // ═══════════════════════════════════════════════════════════════════
+
+        const inputEl = document.getElementById('inputCode');
+        const decryptBtn = document.getElementById('decryptBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const resultBox = document.getElementById('resultBox');
+        const outputEl = document.getElementById('outputResult');
+        const statsContainer = document.getElementById('statsContainer');
+        const loadingEl = document.getElementById('loading');
+
+        async function decrypt() {
+            const code = inputEl.value.trim();
+            if (!code) {
+                alert('الرجاء إدخال سكربت لفك التشفير.');
+                return;
+            }
+
+            loadingEl.classList.add('show');
+            resultBox.classList.remove('show');
+            decryptBtn.disabled = true;
+            decryptBtn.textContent = '⏳ جاري...';
+
+            try {
+                let result = await Decryptor.recursiveDecrypt(code);
+                result = Decryptor.deobfuscateStrings(result);
+
+                const stats = Decryptor.analyze(result);
+
+                statsContainer.innerHTML = `
+                    <div class="stat"><div class="num">${stats.urls}</div><div class="label">روابط</div></div>
+                    <div class="stat"><div class="num">${stats.functions}</div><div class="label">دوال</div></div>
+                    <div class="stat"><div class="num">${stats.lines}</div><div class="label">أسطر</div></div>
+                    <div class="stat"><div class="num">${(stats.size / 1024).toFixed(1)}KB</div><div class="label">الحجم</div></div>
+                `;
+
+                outputEl.textContent = result || '⚠️ لا يوجد كود لفك التشفير.';
+                resultBox.classList.add('show');
+
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            } finally {
+                loadingEl.classList.remove('show');
+                decryptBtn.disabled = false;
+                decryptBtn.textContent = '⚡ فك التشفير';
+            }
+        }
+
+        // نسخ النتيجة
+        copyBtn.addEventListener('click', () => {
+            const text = outputEl.textContent;
+            if (!text || text === '⚠️ لا يوجد كود لفك التشفير.') {
+                alert('لا يوجد نص للنسخ.');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ تم نسخ النص بنجاح!');
+            }).catch(() => {
+                // للجوالات القديمة
+                const area = document.createElement('textarea');
+                area.value = text;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand('copy');
+                area.remove();
+                alert('✅ تم نسخ النص!');
+            });
+        });
+
+        // مسح
+        clearBtn.addEventListener('click', () => {
+            inputEl.value = '';
+            resultBox.classList.remove('show');
+            statsContainer.innerHTML = '';
+            outputEl.textContent = '';
+        });
+
+        // تشغيل تلقائي عند التحميل
+        decryptBtn.addEventListener('click', decrypt);
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(decrypt, 500);
+        });
+
+    })();
+</script>
+
+</body>
+</html>
